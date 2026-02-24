@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class mlops {
     @GetMapping("/mlops")
     public String getData() {
-        return "Welcome to Mlops Class of all student of fusion";
+        return "Welcome to Mlops Class of all student.";
     }
 }
