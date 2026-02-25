@@ -41,5 +41,6 @@ pipeline {
                  echo 'Docker Image Build Completed'
              }
          }
+
     }
 }
