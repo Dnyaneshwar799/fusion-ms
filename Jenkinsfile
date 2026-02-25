@@ -34,5 +34,12 @@ pipeline {
                 echo 'Artifact Creation Completed'
              }
         }
+        stage('Building & Tag Docker Image') {
+            steps {
+                 echo "Starting Building Docker Image"
+                 sh "docker build -t fusion-ms ."
+                 echo 'Docker Image Build Completed'
+             }
+         }
     }
 }
