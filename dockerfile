@@ -1,28 +1,24 @@
-FROM tomcat:9.0.52-jre11-openjdk-slim
+# Use official Tomcat 9 with Java 21 pre-installed
+FROM tomcat:9.0.82-jdk21-temurin
 
-# Install Java 21
-RUN apt-get update && \
-    apt-get install -y openjdk-21-jdk && \
-    apt-get clean;
+# Set maintainer label (optional but good practice)
+LABEL maintainer="satyam.pandey@example.com"
 
-# Set Java 21 as the default Java version
-RUN update-alternatives --set java /usr/lib/jvm/java-21-openjdk-amd64/bin/java && \
-    update-alternatives --set javac /usr/lib/jvm/java-21-openjdk-amd64/bin/javac
+# Remove default ROOT app (optional, keeps container clean)
+RUN rm -rf /usr/local/tomcat/webapps/ROOT
 
-# Copy the JAR file into the Tomcat webapps directory
-COPY ./target/fusion-ms*.jar /usr/local/tomcat/webapps
+# Create a user for running the application
+RUN useradd -m booking-ms
 
-# Expose port 8080
+# Copy your JAR file into the webapps directory
+COPY ./target/fusion-ms*.jar /usr/local/tomcat/webapps/
+
+# Expose the default Tomcat port
 EXPOSE 8080
 
-# Set the user
-USER fusion
+# Set the user to "booking-ms" for security
+USER fusion-ms
 
-# Set the working directory
-WORKDIR /usr/local/tomcat/webapps
-
-# Start Tomcat
+# Default command to run Tomcat
 CMD ["catalina.sh", "run"]
-
-
 
