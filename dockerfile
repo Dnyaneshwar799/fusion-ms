@@ -1,24 +1,25 @@
-# Use official Tomcat 9 with Java 21 pre-installed
-FROM tomcat:9.0.82-jdk21-temurin
+FROM tomcat:9.0.52-jre11-openjdk-slim
 
-# Set maintainer label (optional but good practice)
-LABEL maintainer="dnyaneshwar.pamchal@example.com"
+# Install Java 17
+RUN apt-get update && \
+    apt-get install -y openjdk-17-jdk && \
+    apt-get clean;
 
-# Remove default ROOT app (optional, keeps container clean)
-RUN rm -rf /usr/local/tomcat/webapps/ROOT
+# Set Java 17 as the default Java version
+RUN update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java && \
+    update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
 
-# Create a user for running the application
-RUN useradd -m booking-ms
+# Copy the JAR file into the Tomcat webapps directory
+COPY ./target/fusion-ms*.jar /usr/local/tomcat/webapps/fusion-ms.war
 
-# Copy your JAR file into the webapps directory
-COPY ./target/fusion-ms*.jar /usr/local/tomcat/webapps/
-
-# Expose the default Tomcat port
+# Expose port 8080
 EXPOSE 8080
 
-# Set the user to "booking-ms" for security
-USER fusion-ms
+# Set the user
+USER fusion
 
-# Default command to run Tomcat
+# Set the working directory
+WORKDIR /usr/local/tomcat/webapps
+
+# Start Tomcat
 CMD ["catalina.sh", "run"]
-
