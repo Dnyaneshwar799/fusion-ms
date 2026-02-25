@@ -1,6 +1,6 @@
 pipeline {
 
-     agent { label 'Jslave-bmw' }
+     agent any
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
