@@ -2,7 +2,7 @@
 FROM tomcat:9.0.82-jdk21-temurin
 
 # Set maintainer label (optional but good practice)
-LABEL maintainer="satyam.pandey@example.com"
+LABEL maintainer="dnyaneshwar.pamchal@example.com"
 
 # Remove default ROOT app (optional, keeps container clean)
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
