@@ -9,8 +9,8 @@ RUN apt-get update && \
 RUN update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java && \
     update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
 
-# Copy the JAR file into the Tomcat webapps directory
-COPY ./target/fusion-ms*.jar /usr/local/tomcat/webapps/fusion-ms.war
+# Copy the WAR file into the Tomcat webapps directory
+COPY ./target/fusion-ms*.war /usr/local/tomcat/webapps/fusion-ms.war
 
 # Expose port 8080
 EXPOSE 8080
