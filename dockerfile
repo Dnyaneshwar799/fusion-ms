@@ -8,7 +8,7 @@ RUN apt-get update && \
 # Set Java 17 as the default Java version
 RUN update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java && \
     update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
-    groupadd -r fusion && useradd -r -g fusion fusion
+
 
 # Copy the WAR file into the Tomcat webapps directory
 COPY ./target/fusion-ms*.war /usr/local/tomcat/webapps/fusion-ms.war
