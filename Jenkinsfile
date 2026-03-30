@@ -39,6 +39,7 @@ pipeline {
             steps {
                 echo 'Building Docker Image and Tagging...'
                 sh "docker build -t Dnyaneshwar799/fusion-ms:latest -t fusion-ms:latest ."
+                sh "docker build -t fusion-ms ."
                 echo 'Docker Image Build Completed!'
             }
         }
