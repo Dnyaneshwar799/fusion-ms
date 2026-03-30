@@ -38,7 +38,7 @@ pipeline {
         stage('Build & Tag Docker Image') {
             steps {
                 echo 'Building Docker Image and Tagging...'
-                sh "docker build -t fusion-ms:latest -t fusion-ms:latest ."
+                sh "docker build -t Dnyaneshwar799/fusion-ms:latest -t fusion-ms:latest ."
                 echo 'Docker Image Build Completed!'
             }
         }
@@ -46,9 +46,9 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'dockerhubCred', variable: 'dockerhubCred')]) {
-                        sh 'docker login docker.io -u fusion-ms -p ${dockerhubCred}'
+                        sh 'docker login docker.io -u Dnyaneshwar799 -p ${dockerhubCred}'
                         echo 'Pushing Docker Image to Docker Hub...'
-                        sh 'docker push fusion-ms:latest'
+                        sh 'docker push Dnyaneshwar799/fusion-ms:latest'
                         echo 'Docker Image Pushed to Docker Hub Successfully!'
                     }
                 }
@@ -61,7 +61,7 @@ pipeline {
                         echo 'Tagging and Pushing Docker Image to ECR...'
                         sh '''
                             docker images
-                            docker tag fusion-ms:latest 575114014717.dkr.ecr.ap-south-1.amazonaws.com/fusion-ms:latest
+                            docker tagfusion-ms:latest 575114014717.dkr.ecr.ap-south-1.amazonaws.com/fusion-ms:latest
                             docker push 575114014717.dkr.ecr.ap-south-1.amazonaws.com/fusion-ms:latest
                         '''
                         echo 'Docker Image Pushed to Amazon ECR Successfully!'
