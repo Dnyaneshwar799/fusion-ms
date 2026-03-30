@@ -61,7 +61,7 @@ pipeline {
                         echo 'Tagging and Pushing Docker Image to ECR...'
                         sh '''
                             docker images
-                            docker tagfusion-ms:latest 575114014717.dkr.ecr.ap-south-1.amazonaws.com/fusion-ms:latest
+                            docker run tagfusion-ms:latest 575114014717.dkr.ecr.ap-south-1.amazonaws.com/fusion-ms:latest
                             docker push 575114014717.dkr.ecr.ap-south-1.amazonaws.com/fusion-ms:latest
                         '''
                         echo 'Docker Image Pushed to Amazon ECR Successfully!'
