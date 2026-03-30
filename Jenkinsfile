@@ -30,7 +30,7 @@ pipeline {
                 echo 'Creating WAR Artifact...'
                 sh 'mvn clean package'
                 sh '''
-                    cp target/*.war target/bookmytrip-1.1.${BUILD_NUMBER}.war
+                    cp target/*.jar target/fusion-ms-1.1.${BUILD_NUMBER}.jar
                 '''
                 echo 'WAR Artifact Created Successfully!'
             }
@@ -38,7 +38,7 @@ pipeline {
         stage('Build & Tag Docker Image') {
             steps {
                 echo 'Building Docker Image and Tagging...'
-                sh "docker build -t satyam88/bookmytrip:latest -t bookmytrip:latest ."
+                sh "docker build -t personal2026/fusion-ms:latest -t fusion-ms:latest ."
                 echo 'Docker Image Build Completed!'
             }
         }
@@ -46,9 +46,9 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'dockerhubCred', variable: 'dockerhubCred')]) {
-                        sh 'docker login docker.io -u satyam88 -p ${dockerhubCred}'
+                        sh 'docker login docker.io -u personal2026 -p ${dockerhubCred}'
                         echo 'Pushing Docker Image to Docker Hub...'
-                        sh 'docker push satyam88/bookmytrip:latest'
+                        sh 'docker push personal2026/fusion-ms:latest'
                         echo 'Docker Image Pushed to Docker Hub Successfully!'
                     }
                 }
@@ -57,12 +57,12 @@ pipeline {
         stage('Push Docker Image to Amazon ECR') {
             steps {
                 script {
-                    withDockerRegistry([credentialsId: 'ecr:ap-south-1:ecr-credentials', url: "https://445842764710.dkr.ecr.ap-south-1.amazonaws.com"]) {
+                    withDockerRegistry([credentialsId: 'ecr:ap-south-1:ecr-credentials', url: "https://575114014717.dkr.ecr.ap-south-1.amazonaws.com"]) {
                         echo 'Tagging and Pushing Docker Image to ECR...'
                         sh '''
                             docker images
-                            docker tag bookmytrip:latest 445842764710.dkr.ecr.ap-south-1.amazonaws.com/bookmytrip:latest
-                            docker push 445842764710.dkr.ecr.ap-south-1.amazonaws.com/bookmytrip:latest
+                            docker tagfusion-ms:latest 575114014717.dkr.ecr.ap-south-1.amazonaws.com/fusion-ms:latest
+                            docker push 575114014717.dkr.ecr.ap-south-1.amazonaws.com/fusion-ms:latest
                         '''
                         echo 'Docker Image Pushed to Amazon ECR Successfully!'
                     }
