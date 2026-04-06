@@ -69,5 +69,18 @@ pipeline {
                 }
             }
         }
+         stage('Upload Docker Image to Nexus') {
+                    steps {
+                        script {
+                            withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                                sh 'docker login http://43.204.140.188:8081/repository/fusion-ms/ -u admin -p ${PASSWORD}'
+                                echo "Push Docker Image to Nexus : In Progress"
+                                sh 'docker tag fusion-ms 43.204.140.188:8081/fusion-ms:latest'
+                                sh 'docker push 43.204.140.188:8081/fusion-ms'
+                                echo "Push Docker Image to Nexus : Completed"
+                    }
+                }
+            }
+         }
     }
 }
