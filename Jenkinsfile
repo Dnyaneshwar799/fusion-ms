@@ -25,6 +25,22 @@ pipeline {
                 echo 'JUnit Test Cases Completed Successfully!'
             }
         }
+         stage('Code Quality') {
+            environment {
+                scannerHome = tool 'qube'
+            }
+            steps {
+                echo 'Starting SonarQube Code Quality Scan...'
+                withSonarQubeEnv('sonar-server') {
+                    sh 'mvn sonar:sonar'
+                }
+                echo 'SonarQube Scan Completed. Checking Quality Gate...'
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+                echo 'Quality Gate Check Completed!'
+            }
+        }
         stage('Code Package') {
             steps {
                 echo 'Creating WAR Artifact...'
@@ -40,6 +56,13 @@ pipeline {
                 echo 'Building Docker Image and Tagging...'
                 sh "docker build -t personal2026/fusion-ms:latest -t fusion-ms:latest ."
                 echo 'Docker Image Build Completed!'
+            }
+        }
+        stage('Docker Image Scanning') {
+            steps {
+                echo 'Scanning Docker Image with Trivy...'
+                sh 'trivy image --scanners vuln --no-progress personal2026/fusion-ms:latest || echo "Scan Failed - Proceeding with Caution"'
+                echo 'Docker Image Scanning Completed!'
             }
         }
         stage('Push Docker Image to Docker Hub') {
@@ -80,6 +103,14 @@ pipeline {
                         echo "Push Docker Image to Nexus : Completed"
                     }
                 }
+            }
+        }
+         stage('Cleanup Docker Images') {
+            steps {
+                echo 'Cleaning up local Docker images...'
+                sh "docker rmi -f personal2026/fusion-ms:latest || true"
+                sh "docker rmi -f fusion-ms:latest || true"
+                echo 'Local Docker images deleted successfully!'
             }
         }
     }
